@@ -4,7 +4,7 @@ const webpack = require('webpack'),
 let srcDir = path.resolve(__dirname, '..', 'src')
 module.exports = {
 	entry: {
-		'sketch-color-picker': path.join(srcDir, 'index.js')
+		'vue-sketch-color-picker': path.join(srcDir, 'index.js')
 	},
 
 	output: {

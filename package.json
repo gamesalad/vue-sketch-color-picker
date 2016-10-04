@@ -1,12 +1,12 @@
 {
   "name": "vue-sketch-color-picker",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Vue Sketch Color Picker Component",
   "keywords": [
     "color",
     "vuejs"
   ],
-  "main": "dist/vue-sketch-color-picker.min.js",
+  "main": "dist/vue-sketch-color-picker.js",
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules --config build/webpack.prod.config.js",
     "dev": "webpack-dev-server --inline --hot --no-info --config build/webpack.dev.config.js",
