@@ -18,11 +18,11 @@ new Vue({
 })
 ```
 
-## Local setup
+## Build
 
 ```
 npm install
-npm run dev
+npm run build
 ```
 
 ## Usage
@@ -62,7 +62,8 @@ new Vue({
 ```
 
 ```html
-<color-picker :colors.sync="colors"></color-picker>
+<!-- scheme can be dark or light -->
+<color-picker :colors.sync="colors" scheme="dark"></color-picker>
 ```
 
 
