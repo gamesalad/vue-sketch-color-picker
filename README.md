@@ -1,30 +1,71 @@
 # vue-sketch-color-picker
+Color Picker with Sketch Style.
 
-> Vue Sketch-style Color picker
+## Installation
 
-## Build Setup
-
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run e2e tests
-npm run e2e
-
-# run all tests
-npm test
+### NPM
+```bash
+$ npm install vue-sketch-color-picker
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+```js
+import colorPicker from 'vue-sketch-color-picker'
+
+new Vue({
+  components: {
+    colorPicker
+  }
+})
+```
+
+## Build
+
+```
+npm install
+npm run build
+```
+
+## Usage
+```js
+
+new Vue({
+  el: '#app',
+  components: {
+    colorPickers
+  },
+  data: {
+    colors: {
+      hex: '#194d33',
+      hsl: {
+        h: 150,
+        s: 0.5,
+        l: 0.2,
+        a: 1
+      },
+      hsv: {
+        h: 150,
+        s: 0.66,
+        v: 0.30,
+        a: 1
+      },
+      rgba: {
+        r: 25,
+        g: 77,
+        b: 51,
+        a: 1
+      },
+      a: 1
+    }
+  }
+})
+
+```
+
+```html
+<!-- scheme can be dark or light -->
+<color-picker :colors.sync="colors" scheme="dark"></color-picker>
+```
+
+
+## License
+vue-sketch-color-picker is licensed under [The MIT License](LICENSE).
