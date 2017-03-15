@@ -1,108 +1,134 @@
-<template lang="pug">
-.sketch-color-picker--editable-input
-	input.sketch-color-picker--editable-input---input(
-	v-model="val | maxFilter",
-	@keydown="handleKeyDown",
-	@input="handleChange")
-
-	.sketch-color-picker--editable-input---label(@mousedown="handleMouseDown") {{label}}
+<template>
+<div class="sketch-color-picker--editable">
+  <input type="text" class="sketch-color-picker--editable__input"
+    v-model="colorValue"
+    @keydown="keydown"
+    @input="input" />
+  <div class="sketch-color-picker--editable__label" @mousedown="mousedown">
+    {{label}}
+  </div>
+</div>
 </template>
 
 <script>
 export default {
-	name: 'editableInput',
-	props: {
-		label: {
-			type: String
-		},
+  name: 'EditableInput',
+  props: {
+    value: {
+      type: Object
+    },
 
-		val: {
-			type: [String, Number]
-		},
+    label: {
+      type: String
+    },
 
-		max: {
-			type: Number
-		},
+    max: {
+      type: Number
+    },
 
-		onChange: {
-			type: Function
-		},
+    arrowOffset: {
+      type: Number,
+      default: 1
+    }
+  },
 
-		arrowOffset: {
-			type: Number,
-			default: 1
-		}
-	},
+  filters: {
+    maxFilter: {
+      read (val) {
+        return (this.max && val > this.max)
+          ? this.max
+          : val
+      },
+      write (val, oldVal) {
+        return val
+      }
+    }
+  },
 
-	filters: {
-		maxFilter: {
-			read (val) {
-				if (this.max && val > this.max) {
-					return this.max
-				} else {
-					return val
-				}
-			},
+  computed: {
+    colors () {
+      return this.value
+    },
 
-			write (val, oldVal) {
-				return val
-			}
-		}
-	},
+    colorValue () {
+      if (['r', 'g', 'b', 'a'].includes(this.label)) {
+        return this.colors.rgba[this.label]
+      }
 
-	methods: {
-		handleChange (e) {
-			let data = {}
-			data[this.label] = this.val
-			this.onChange(data)
-		},
+      return this.colors[this.label]
+    }
+  },
 
-		handleBlur (e) {
-			console.log(e)
-		},
+  methods: {
+    update (val) {
+      let colors = {}
+      colors[this.label] = val
+      this.$emit('update', colors)
+    },
 
-		handleKeyDown (e) {
-			let val = this.val, number = Number(val)
+    handleBlur (e) {
+      console.log(e)
+    },
 
-			if (number) {
-				let amount = this.arrowOffset || 1
+    input (e) {
+      this.update(e.target.value)
+    },
 
-				if (e.keyCode === 38) {
-					this.val = number + amount
-					e.preventDefault()
-				}
+    keydown (e) {
+      let val = this.colors
+      let number = Number(val)
 
-				if (e.keyCode === 40) {
-					this.val = number - amount
-					e.preventDefault()
-				}
+      if (number) {
+        let amount = this.arrowOffset || 1
 
-				this.handleChange()
-			}
-		},
+        switch (e.keyCode) {
+          case 38:
+            val = number + amount
+            e.preventDefault()
+            break
 
-		handleDrag (e) {
-			console.log(e)
-		},
+          case 40:
+            val = number - amount
+            e.preventDefault()
+            break
+        }
 
-		handleMouseDown (e) {
-			console.log(e)
-		}
-	}
+        this.update(val)
+      }
+    },
+
+    handleDrag (e) {
+      console.log(e)
+    },
+
+    mousedown (e) {
+      console.log(e)
+    }
+  }
 }
 </script>
 
-<style lang="sass">
-.sketch-color-picker--editable-input {
-	position: relative;
-	&---input {
-		padding: 0;
-		border: 0;
-		outline: none;
-	}
-
-	&---label {
-		text-transform: capitalize;
-	}
+<style lang="scss">
+.sketch-color-picker--editable {
+  position: relative;
+  &__input {
+    padding: 0;
+    border: 0;
+    outline: none;
+    width: 80%;
+    padding: 4px 10% 3px;
+    border: 1px solid #ccc;
+    font-size: 11px;
+    &.nb-left {
+      border-left: none;
+    }
+  }
+  &__label {
+    display: block;
+    text-align: center;
+    font-size: 11px;
+    text-transform: capitalize;
+    margin: 10px 0;
+  }
 }
 </style>

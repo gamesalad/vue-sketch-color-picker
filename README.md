@@ -1,5 +1,5 @@
 # vue-sketch-color-picker
-Color Picker with Sketch Style. This is fork from https://github.com/xiaokaike/vue-color
+Color Picker with Sketch Style.
 
 ## Installation
 
