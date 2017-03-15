@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Vue Sketch-style Color Picker",
   "author": "oknoorap <oknoorap@gmail.com>",
-  "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
