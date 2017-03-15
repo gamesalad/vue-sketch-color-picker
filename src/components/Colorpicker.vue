@@ -53,7 +53,7 @@ import Alpha from './Alpha.vue'
 import EditableInput from './EditableInput.vue'
 
 export default {
-  name: 'ColorPicker',
+  name: 'Colorpicker',
   components: {
     Saturation,
     Hue,
