@@ -8,13 +8,13 @@
     <div id="app"></div>
     <!-- built files will be auto injected -->
 
-    <script src="node_modules/vue/dist/vue.js"></script>
-    <script src="dist/vue-sketch-color-picker.js"></script>
-    <script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.min.js"></script>
+    <script src="vue-sketch-color-picker.js"></script>
+    <script defer>
       new Vue({
         el: '#app',
         components: {
-          SketchColorPicker: SketchColorPicker
+          SketchColorPicker: window.SketchColorPicker
         },
         data: {
           colors: {
