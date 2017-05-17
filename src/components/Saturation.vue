@@ -12,6 +12,7 @@
 
 <script>
 import throttle from 'lodash.throttle'
+import srcType from '../srcType'
 
 export default {
   name: 'Saturation',
@@ -72,7 +73,7 @@ export default {
         s: saturation,
         v: bright,
         a: this.colors.hsl.a,
-        source: 'rgb'
+        source: srcType.SATURATION
       }
 
       this.throttle(this.changeColor, colors)
