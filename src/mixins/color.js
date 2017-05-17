@@ -1,11 +1,12 @@
 import tinycolor from 'tinycolor2'
 
 const updateColor = (data) => {
-  if (data.a && data.a > 1) {
-    data.a = 1
+  if (data.a) {
+    if (data.a > 1) data.a = 1
+    if (data.a <= 0) data.a = 0
   }
 
-  data.a = data.a || 1
+  data.a = typeof data.a === 'undefined' ? 1 : data.a
   let color = tinycolor(data)
 
   if (data.hex) {
