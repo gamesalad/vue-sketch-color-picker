@@ -40,7 +40,15 @@
             a: 1
           }
         },
-        template: '<SketchColorPicker :colors="colors" scheme="dark" />'
+        methods: {
+          handleUpdate: function (colors) {
+            console.log('update', colors, colors.source)
+          },
+          handleMouseUp: function (colors) {
+            console.log('mouseup', colors)
+          }
+        },
+        template: '<SketchColorPicker :colors="colors" scheme="dark" @update="handleUpdate" @mouseup="handleMouseUp" />'
       })
     </script>
   </body>
