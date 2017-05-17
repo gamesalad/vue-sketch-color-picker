@@ -1,15 +1,15 @@
 <template>
 <div :class="[scheme]" class="sketch-color-picker">
   <div class="sketch-color-picker--saturation-wrap">
-    <Saturation v-model="colors" @update="pickerChange" />
+    <Saturation v-model="colors" @update="handleUpdate" @mouseup="handleMouseup" />
   </div>
   <div class="sketch-color-picker--controls">
     <div class="sketch-color-picker--sliders">
       <div class="sketch-color-picker--hue-wrap">
-        <Hue v-model="colors" @update="pickerChange" />
+        <Hue v-model="colors" @update="handleUpdate" />
       </div>
       <div class="sketch-color-picker--alpha-wrap">
-        <Alpha v-model="colors" @update="pickerChange" />
+        <Alpha v-model="colors" @update="handleUpdate" />
       </div>
     </div>
     <div class="sketch-color-picker--color-wrap">
@@ -18,19 +18,19 @@
   </div>
   <div class="sketch-color-picker--fields">
     <div class="sketch-color-picker--field-double">
-      <EditableInput label="hex" v-model="colors" @update="inputChange" />
+      <EditableInput label="hex" max="7" v-model="colors" @update="inputChange" />
     </div>
     <div class="sketch-color-picker--field-single">
-      <EditableInput label="r" v-model="colors" @update="inputChange" class="nb-left" />
+      <EditableInput label="r" max="3" v-model="colors" @update="inputChange" class="nb-left" />
     </div>
     <div class="sketch-color-picker--field-single">
-      <EditableInput label="g" v-model="colors" @update="inputChange" class="nb-left" />
+      <EditableInput label="g" max="3" v-model="colors" @update="inputChange" class="nb-left" />
     </div>
     <div class="sketch-color-picker--field-single">
-      <EditableInput label="b" v-model="colors" @update="inputChange" class="nb-left" />
+      <EditableInput label="b" max="3" v-model="colors" @update="inputChange" class="nb-left" />
     </div>
     <div class="sketch-color-picker--field-single">
-      <EditableInput label="a" v-model="colors" @update="inputChange" class="nb-left" />
+      <EditableInput label="a" max="4" v-model="colors" @update="inputChange" class="nb-left" />
     </div>
   </div>
   <div class="sketch-color-picker--presets">
@@ -39,7 +39,7 @@
       @click="changeColor(color)"
       @contextmenu="removePreset($event, color)"
       class="sketch-color-picker--presets-color" />
-    <a @click="addPreset()" class="sketch-color-picker--presets-color">+</a>
+    <a @click="addPreset()" class="add sketch-color-picker--presets-color">+</a>
   </div>
 </div>
 </template>
@@ -51,9 +51,11 @@ import Saturation from './Saturation.vue'
 import Hue from './Hue.vue'
 import Alpha from './Alpha.vue'
 import EditableInput from './EditableInput.vue'
+import srcType from '../srcType'
 
 export default {
   name: 'Colorpicker',
+  srcType,
   components: {
     Saturation,
     Hue,
@@ -77,32 +79,39 @@ export default {
     changeColor (color) {
       this.setColor({
         hex: color,
-        source: 'hex'
+        source: srcType.PRESET
       })
     },
 
-    pickerChange (color) {
+    handleUpdate (color) {
       this.setColor(color)
     },
 
-    inputChange (data) {
-      if (!data) {
+    handleMouseup (color) {
+      this.$emit('mouseup', this.colors)
+    },
+
+    inputChange (colors) {
+      if (!colors) {
         return
       }
 
-      if (data.hex) {
-        this.isValidHex(data.hex) && this.setColor({
-          hex: data.hex,
-          source: 'hex'
+      if (colors.hex) {
+        this.isValidHex(colors.hex) && this.setColor({
+          hex: colors.hex,
+          source: srcType.HEX
         })
-      } else if (data.r || data.g || data.b || data.a) {
-        const { r, g, b, a } = this.colors
+      }
+
+      if ('r' in colors || 'g' in colors || 'b' in colors || 'a' in colors) {
+        const { r, g, b, a } = this.colors.rgba
+        const { r: R, g: G, b: B, a: A } = colors
         this.setColor({
-          r: data.r || r,
-          g: data.g || g,
-          b: data.b || b,
-          a: data.a || a,
-          source: 'rgba'
+          r: R || r,
+          g: G || g,
+          b: B || b,
+          a: A || a,
+          source: srcType.RGBA
         })
       }
     }
@@ -231,6 +240,9 @@ $prefix: 'sketch-color-picker';
     }
     &:nth-child(8n) {
       margin-right: 0;
+    }
+    &.add {
+      margin-bottom: 10px !important
     }
   }
 

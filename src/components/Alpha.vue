@@ -59,10 +59,12 @@ export default {
       let left = (event.pageX || event.touches[0].pageX) - (container.getBoundingClientRect().left + window.pageXOffset)
       let a = Math.round(left * 100 / containerWidth) / 100
 
-      if (left > containerWidth) {
-        a = 1
-      } else if (left < 0.01) {
+      if (left < 0) {
         a = 0
+      }
+
+      if (left > 0 && left > containerWidth) {
+        a = 1
       }
 
       if (this.colors.a !== a) {
