@@ -90,6 +90,7 @@ export default {
 
     handleMouseUp (e) {
       this.unbindEventListeners()
+      this.$emit('mouseup', this.colors)
     },
 
     unbindEventListeners () {
