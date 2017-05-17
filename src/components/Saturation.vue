@@ -52,8 +52,8 @@ export default {
       const containerWidth = container.clientWidth
       const containerHeight = container.clientHeight
 
-      let left = (e.pageX || e.touches[0].pageX) - (container.getBoundingClientRect().left + window.pageXOffset)
-      let top = (e.pageY || e.touches[0].pageY) - (container.getBoundingClientRect().top + window.pageYOffset)
+      let left = (e.pageX || e.touches[0].pageX || 0) - (container.getBoundingClientRect().left + window.pageXOffset)
+      let top = (e.pageY || e.touches[0].pageY || 0) - (container.getBoundingClientRect().top + window.pageYOffset)
 
       if (left < 0) {
         left = 0
