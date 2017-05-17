@@ -1,0 +1,39 @@
+<!DOCTYPE html><html><head><meta charset=utf-8><title>vue-sketch-color-picker</title><link href=/static/css/vue-sketch-color-picker.e3cf691bad54c32b6882eaaf82475b9e.css rel=stylesheet></head><body><div id=app></div><script src=https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.min.js></script><script src=vue-sketch-color-picker.js></script><script defer=defer>new Vue({
+        el: '#app',
+        components: {
+          SketchColorPicker: window.SketchColorPicker
+        },
+        data: {
+          colors: {
+            hex: '#194d33',
+            hsl: {
+              h: 150,
+              s: 0.5,
+              l: 0.2,
+              a: 1
+            },
+            hsv: {
+              h: 150,
+              s: 0.66,
+              v: 0.30,
+              a: 1
+            },
+            rgba: {
+              r: 25,
+              g: 77,
+              b: 51,
+              a: 1
+            },
+            a: 1
+          }
+        },
+        methods: {
+          handleUpdate: function (colors) {
+            console.log('update', colors, colors.source)
+          },
+          handleMouseUp: function (colors) {
+            console.log('mouseup', colors)
+          }
+        },
+        template: '<SketchColorPicker :colors="colors" scheme="dark" @update="handleUpdate" @mouseup="handleMouseUp" />'
+      })</script><script type=text/javascript src=/static/js/manifest.77b69868192ecb926847.js></script><script type=text/javascript src=/static/js/vendor.55e534254184fa0f00aa.js></script><script type=text/javascript src=/static/js/vue-sketch-color-picker.c220789a348a952cc076.js></script></body></html>
