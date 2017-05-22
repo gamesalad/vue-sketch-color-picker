@@ -1,6 +1,11 @@
 <template>
 <div class="sketch-color-picker--editable">
-  <input type="text" class="sketch-color-picker--editable__input" v-model="colors" @input="input" :maxlength="max" />
+  <input type="text" class="sketch-color-picker--editable__input"
+    v-model="colors"
+    @input="handleInput"
+    @focus="handleFocus"
+    @blur="handleUpdate"
+    :maxlength="max" />
   <div class="sketch-color-picker--editable__label">{{label}}</div>
 </div>
 </template>
@@ -32,12 +37,18 @@ export default {
     }
   },
 
+  data () {
+    return {
+      initialValue: ''
+    }
+  },
+
   methods: {
-    input (e) {
+    getColor (e) {
       let colors = {}
       let val = e.target.value
 
-      if (val && val <= 0xff && val >= 0 && 'rgba'.split('').includes(this.label)) {
+      if (val >= 0 && val <= 0xff && 'rgba'.split('').includes(this.label)) {
         val = Number(e.target.value)
         if (this.label === 'a') {
           val = parseFloat(e.target.value)
@@ -45,7 +56,22 @@ export default {
       }
 
       colors[this.label] = val
-      this.$emit('update', colors)
+      return colors
+    },
+
+    handleInput (e) {
+      this.$emit('change', this.getColor(e))
+    },
+
+    handleFocus (e) {
+      this.initialValue = this.getColor(e)
+    },
+
+    handleUpdate (e) {
+      const colors = this.getColor(e)
+      if (colors[this.label] !== this.initialValue[this.label]) {
+        this.$emit('update')
+      }
     }
   }
 }

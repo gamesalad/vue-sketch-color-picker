@@ -1,15 +1,15 @@
 <template>
 <div :class="[scheme]" class="sketch-color-picker">
   <div class="sketch-color-picker--saturation-wrap">
-    <Saturation v-model="colors" @update="handleUpdate" @mouseup="handleMouseup" />
+    <Saturation v-model="colors" @change="handleChange" @mousedown="handleMousedown" @mouseup="handleUpdate" />
   </div>
   <div class="sketch-color-picker--controls">
     <div class="sketch-color-picker--sliders">
       <div class="sketch-color-picker--hue-wrap">
-        <Hue v-model="colors" @update="handleUpdate" />
+        <Hue v-model="colors" @change="handleChange" @mousedown="handleMousedown" @mouseup="handleUpdate" />
       </div>
       <div class="sketch-color-picker--alpha-wrap">
-        <Alpha v-model="colors" @update="handleUpdate" />
+        <Alpha v-model="colors" @change="handleChange" @mousedown="handleMousedown" @mouseup="handleUpdate" />
       </div>
     </div>
     <div class="sketch-color-picker--color-wrap">
@@ -18,25 +18,25 @@
   </div>
   <div class="sketch-color-picker--fields">
     <div class="sketch-color-picker--field-double">
-      <EditableInput label="hex" max="7" v-model="colors" @update="inputChange" />
+      <EditableInput label="hex" max="7" v-model="colors" @change="inputChange" @update="inputUpdate" />
     </div>
     <div class="sketch-color-picker--field-single">
-      <EditableInput label="r" max="3" v-model="colors" @update="inputChange" class="nb-left" />
+      <EditableInput label="r" max="3" v-model="colors" @change="inputChange" @update="inputUpdate" class="nb-left" />
     </div>
     <div class="sketch-color-picker--field-single">
-      <EditableInput label="g" max="3" v-model="colors" @update="inputChange" class="nb-left" />
+      <EditableInput label="g" max="3" v-model="colors" @change="inputChange" @update="inputUpdate" class="nb-left" />
     </div>
     <div class="sketch-color-picker--field-single">
-      <EditableInput label="b" max="3" v-model="colors" @update="inputChange" class="nb-left" />
+      <EditableInput label="b" max="3" v-model="colors" @change="inputChange" @update="inputUpdate" class="nb-left" />
     </div>
     <div class="sketch-color-picker--field-single">
-      <EditableInput label="a" max="4" v-model="colors" @update="inputChange" class="nb-left" />
+      <EditableInput label="a" max="4" v-model="colors" @change="inputChange" @update="inputUpdate" class="nb-left" />
     </div>
   </div>
   <div class="sketch-color-picker--presets">
     <div v-for="color in presets"
       :style="{backgroundColor: color}"
-      @click="changeColor(color)"
+      @click="handleUpdatePreset(color)"
       @contextmenu="removePreset($event, color)"
       class="sketch-color-picker--presets-color" />
     <a @click="addPreset()" class="add sketch-color-picker--presets-color">+</a>
@@ -69,6 +69,11 @@ export default {
       default: 'light'
     }
   },
+  data () {
+    return {
+      oldColor: {}
+    }
+  },
   computed: {
     activeColor () {
       const { r, g, b, a } = this.colors.rgba
@@ -76,19 +81,34 @@ export default {
     }
   },
   methods: {
-    changeColor (color) {
+    handleUpdatePreset (color) {
+      this.handleMousedown(this.colors)
       this.setColor({
         hex: color,
         source: srcType.PRESET
+      }, false)
+      this.$nextTick(() => {
+        this.handleUpdate(this.colors)
       })
     },
 
-    handleUpdate (color) {
+    handleChange (color) {
       this.setColor(color)
     },
 
-    handleMouseup (color) {
-      this.$emit('mouseup', this.colors)
+    handleMousedown (color) {
+      this.oldColor = color
+    },
+
+    handleUpdate (colors) {
+      this.$emit('update', colors, this.oldColor)
+    },
+
+    inputUpdate (colors) {
+      this.inputChange(colors)
+      this.$nextTick(() => {
+        this.$emit('update', this.colors, this.oldColor)
+      })
     },
 
     inputChange (colors) {
@@ -107,10 +127,10 @@ export default {
         const { r, g, b, a } = this.colors.rgba
         const { r: R, g: G, b: B, a: A } = colors
         this.setColor({
-          r: R || r,
-          g: G || g,
-          b: B || b,
-          a: A || a,
+          r: (typeof R !== 'undefined') ? R : r,
+          g: (typeof G !== 'undefined') ? G : g,
+          b: (typeof B !== 'undefined') ? B : b,
+          a: (typeof A !== 'undefined') ? A : a,
           source: srcType.RGBA
         })
       }

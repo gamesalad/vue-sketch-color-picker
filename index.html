@@ -41,14 +41,14 @@
           }
         },
         methods: {
-          handleUpdate: function (colors) {
-            console.log('update', colors, colors.source)
+          handleChange: function (colors) {
+            console.log('every change', colors)
           },
-          handleMouseUp: function (colors) {
-            console.log('mouseup', colors)
+          handleUpdate: function (colors, oldColor) {
+            console.log('final update', colors, oldColor)
           }
         },
-        template: '<SketchColorPicker :colors="colors" scheme="dark" @update="handleUpdate" @mouseup="handleMouseUp" />'
+        template: '<SketchColorPicker :colors="colors" scheme="dark" @change="handleChange" @update="handleUpdate" />'
       })
     </script>
   </body>
