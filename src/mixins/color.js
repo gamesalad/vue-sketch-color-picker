@@ -1,4 +1,5 @@
 import tinycolor from 'tinycolor2'
+import srcType from '../srcType'
 
 const updateColor = (data) => {
   if (data.a) {
@@ -58,7 +59,8 @@ export default {
             b: 255,
             a: 1
           },
-          a: 1
+          a: 1,
+          source: srcType.SATURATION
         }
       }
     }
@@ -66,7 +68,8 @@ export default {
 
   data () {
     return {
-      store: updateColor(this.value)
+      store: updateColor(this.value),
+      broadcast: false
     }
   },
 
@@ -78,13 +81,16 @@ export default {
 
       set (value) {
         this.store = value
-        this.$emit('update', value)
+        if (this.broadcast) {
+          this.$emit('change', value)
+        }
       }
     }
   },
 
   methods: {
-    setColor (data) {
+    setColor (data, isBroadcast = true) {
+      this.broadcast = isBroadcast
       this.colors = updateColor(data)
     },
 

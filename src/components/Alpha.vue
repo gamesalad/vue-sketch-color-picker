@@ -6,9 +6,9 @@
 
   <div class="sketch-color-picker--c-alpha-gradient" :style="{background: gradientColor}" />
   <div class="sketch-color-picker--c-alpha-container" ref="container"
-    @mousedown="mousedown"
-    @touchmove="update"
-    @touchstart="update">
+    @mousedown="handleMousedown"
+    @touchmove="handleChange"
+    @touchstart="handleChange">
     <div class="sketch-color-picker--c-alpha-pointer" :style="pointerStyles">
       <slot>
         <div class="sketch-color-picker--c-alpha-picker"></div>
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import srcType from '../srcType'
 import Checkboard from './Checkboard.vue'
 export default {
   name: 'Alpha',
@@ -51,8 +52,10 @@ export default {
     }
   },
   methods: {
-    update (event, skip) {
-      !skip && event.preventDefault()
+    handleChange (event, skip) {
+      if (!skip) {
+        event.preventDefault()
+      }
 
       const container = this.$refs.container
       const containerWidth = container.clientWidth
@@ -73,26 +76,28 @@ export default {
           s: this.colors.hsl.s,
           l: this.colors.hsl.l,
           a: a,
-          source: 'rgba'
+          source: srcType.RGBA
         }
 
-        this.$emit('update', colors)
+        this.$emit('change', colors)
       }
     },
 
-    mousedown (event) {
-      this.update(event, true)
-      window.addEventListener('mousemove', this.update)
-      window.addEventListener('mouseup', this.mouseup)
+    handleMousedown (event) {
+      this.handleChange(event, true)
+      this.$emit('mousedown', this.colors)
+      window.addEventListener('mousemove', this.handleChange)
+      window.addEventListener('mouseup', this.handleMouseup)
     },
 
-    mouseup () {
-      this.unbindEvents()
+    handleMouseup () {
+      this.$emit('mouseup')
+      this.unbindEventListeners()
     },
 
-    unbindEvents () {
-      window.removeEventListener('mousemove', this.update)
-      window.removeEventListener('mouseup', this.mouseup)
+    unbindEventListeners () {
+      window.removeEventListener('mousemove', this.handleChange)
+      window.removeEventListener('mouseup', this.handleMouseup)
     }
   }
 }

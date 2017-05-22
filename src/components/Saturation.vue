@@ -47,7 +47,9 @@ export default {
     }, 50),
 
     handleChange (e, skip) {
-      !skip && e.preventDefault()
+      if (!skip) {
+        e.preventDefault()
+      }
 
       const container = this.$refs.container
       const containerWidth = container.clientWidth
@@ -76,15 +78,14 @@ export default {
         source: srcType.SATURATION
       }
 
-      this.throttle(this.changeColor, colors)
-    },
-
-    changeColor (colors) {
-      this.$emit('update', colors)
+      this.throttle(() => {
+        this.$emit('change', colors)
+      }, colors)
     },
 
     handleMouseDown (e) {
       this.handleChange(e, true)
+      this.$emit('mousedown', this.colors)
       window.addEventListener('mousemove', this.handleChange)
       window.addEventListener('mouseup', this.handleMouseUp)
     },

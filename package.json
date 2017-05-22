@@ -13,6 +13,7 @@
     "release": "webpack -p --progress --hide-modules --config  ./build/webpack.release.js"
   },
   "dependencies": {
+    "lodash.debounce": "^4.0.8",
     "tinycolor2": "^1.4.1",
     "vue": "^2.3.3"
   },

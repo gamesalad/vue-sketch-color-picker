@@ -51,7 +51,9 @@ export default {
 
   methods: {
     handleChange (e, skip) {
-      !skip && e.preventDefault()
+      if (!skip) {
+        e.preventDefault()
+      }
 
       const container = this.$refs.container
       const containerWidth = container.clientWidth
@@ -101,15 +103,17 @@ export default {
       }
 
       if (colors) {
-        this.$emit('update', colors)
+        this.$emit('change', colors)
       }
     },
     handleMouseDown (e) {
       this.handleChange(e, true)
+      this.$emit('mousedown', this.colors)
       window.addEventListener('mousemove', this.handleChange)
       window.addEventListener('mouseup', this.handleMouseUp)
     },
     handleMouseUp (e) {
+      this.$emit('mouseup', this.colors)
       this.unbindEventListeners()
     },
     unbindEventListeners () {
