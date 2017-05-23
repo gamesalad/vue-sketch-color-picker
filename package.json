@@ -1,6 +1,6 @@
 {
   "name": "vue-sketch-color-picker",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Vue Sketch-style Color Picker",
   "author": "oknoorap <oknoorap@gmail.com>",
   "main": "dist/vue-sketch-color-picker.js",
