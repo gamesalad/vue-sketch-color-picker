@@ -1,15 +1,15 @@
 <template>
 <div :class="[scheme]" class="sketch-color-picker">
   <div class="sketch-color-picker--saturation-wrap">
-    <Saturation v-model="colors" @change="handleChange" @mousedown="handleMousedown" @mouseup="handleUpdate" />
+    <Saturation v-model="colorsModel" @change="handleChange" @mousedown="handleMousedown" @mouseup="handleUpdate" />
   </div>
   <div class="sketch-color-picker--controls">
     <div class="sketch-color-picker--sliders">
       <div class="sketch-color-picker--hue-wrap">
-        <Hue v-model="colors" @change="handleChange" @mousedown="handleMousedown" @mouseup="handleUpdate" />
+        <Hue v-model="colorsModel" @change="handleChange" @mousedown="handleMousedown" @mouseup="handleUpdate" />
       </div>
       <div class="sketch-color-picker--alpha-wrap">
-        <Alpha v-model="colors" @change="handleChange" @mousedown="handleMousedown" @mouseup="handleUpdate" />
+        <Alpha v-model="colorsModel" @change="handleChange" @mousedown="handleMousedown" @mouseup="handleUpdate" />
       </div>
     </div>
     <div class="sketch-color-picker--color-wrap">
@@ -18,19 +18,19 @@
   </div>
   <div class="sketch-color-picker--fields">
     <div class="sketch-color-picker--field-double">
-      <EditableInput label="hex" max="7" v-model="colors" @change="inputChange" @update="inputUpdate" />
+      <EditableInput label="hex" max="7" v-model="colorsModel" @change="inputChange" @update="inputUpdate" />
     </div>
     <div class="sketch-color-picker--field-single">
-      <EditableInput label="r" max="3" v-model="colors" @change="inputChange" @update="inputUpdate" class="nb-left" />
+      <EditableInput label="r" max="3" v-model="colorsModel" @change="inputChange" @update="inputUpdate" class="nb-left" />
     </div>
     <div class="sketch-color-picker--field-single">
-      <EditableInput label="g" max="3" v-model="colors" @change="inputChange" @update="inputUpdate" class="nb-left" />
+      <EditableInput label="g" max="3" v-model="colorsModel" @change="inputChange" @update="inputUpdate" class="nb-left" />
     </div>
     <div class="sketch-color-picker--field-single">
-      <EditableInput label="b" max="3" v-model="colors" @change="inputChange" @update="inputUpdate" class="nb-left" />
+      <EditableInput label="b" max="3" v-model="colorsModel" @change="inputChange" @update="inputUpdate" class="nb-left" />
     </div>
     <div class="sketch-color-picker--field-single">
-      <EditableInput label="a" max="4" v-model="colors" @change="inputChange" @update="inputUpdate" class="nb-left" />
+      <EditableInput label="a" max="4" v-model="colorsModel" @change="inputChange" @update="inputUpdate" class="nb-left" />
     </div>
   </div>
   <div class="sketch-color-picker--presets">
@@ -76,19 +76,19 @@ export default {
   },
   computed: {
     activeColor () {
-      const { r, g, b, a } = this.colors.rgba
+      const { r, g, b, a } = this.colorsModel.rgba
       return `rgba(${[r, g, b, a].join(',')})`
     }
   },
   methods: {
     handleUpdatePreset (color) {
-      this.handleMousedown(this.colors)
+      this.handleMousedown(this.colorsModel)
       this.setColor({
         hex: color,
         source: srcType.PRESET
       }, false)
       this.$nextTick(() => {
-        this.handleUpdate(this.colors)
+        this.handleUpdate(this.colorsModel)
       })
     },
 
@@ -107,7 +107,7 @@ export default {
     inputUpdate (colors) {
       this.inputChange(colors)
       this.$nextTick(() => {
-        this.$emit('update', this.colors, this.oldColor)
+        this.$emit('update', this.colorsModel, this.oldColor)
       })
     },
 
@@ -124,7 +124,7 @@ export default {
       }
 
       if ('r' in colors || 'g' in colors || 'b' in colors || 'a' in colors) {
-        const { r, g, b, a } = this.colors.rgba
+        const { r, g, b, a } = this.colorsModel.rgba
         const { r: R, g: G, b: B, a: A } = colors
         this.setColor({
           r: (typeof R !== 'undefined') ? R : r,

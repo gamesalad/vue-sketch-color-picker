@@ -36,30 +36,30 @@ const updateColor = (data) => {
 
 export default {
   props: {
-    value: {
+    colors: {
       type: Object,
       default: () => {
         return {
           hex: '#000000',
           hsl: {
-            h: 150,
-            s: 0.5,
-            l: 0.2,
-            a: 1
+            h: 0,
+            s: 0,
+            l: 0,
+            a: 0
           },
           hsv: {
-            h: 255,
-            s: 255,
-            v: 0.30,
-            a: 1
+            h: 0,
+            s: 0,
+            v: 1,
+            a: 0
           },
           rgba: {
-            r: 255,
-            g: 255,
-            b: 255,
-            a: 1
+            r: 0,
+            g: 0,
+            b: 0,
+            a: 0
           },
-          a: 1,
+          a: 0,
           source: srcType.SATURATION
         }
       }
@@ -68,13 +68,13 @@ export default {
 
   data () {
     return {
-      store: updateColor(this.value),
+      store: updateColor(this.colors),
       broadcast: false
     }
   },
 
   computed: {
-    colors: {
+    colorsModel: {
       get () {
         return this.store
       },
@@ -91,7 +91,7 @@ export default {
   methods: {
     setColor (data, isBroadcast = true) {
       this.broadcast = isBroadcast
-      this.colors = updateColor(data)
+      this.colorsModel = updateColor(data)
     },
 
     isValidHex (hex) {
