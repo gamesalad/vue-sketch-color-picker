@@ -41,7 +41,6 @@
       class="sketch-color-picker--presets-color" />
     <a @click="addPreset()" class="add sketch-color-picker--presets-color">+</a>
   </div>
-  <div class="note">Rounding when converting between hexidecimal and decimal may cause small changes when editing color channel values.</div>
 </div>
 </template>
 
@@ -278,13 +277,6 @@ $prefix: 'sketch-color-picker';
     color: #d9d9d9;
     border-radius: 2px;
     font-family: arial,sans-serif;
-  }
-
-  .note {
-    color:#999;
-    font-size: 10px;
-    font-family: sans-serif;
-    padding-bottom: 1em;
   }
 }
 </style>

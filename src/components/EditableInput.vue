@@ -35,7 +35,7 @@ export default {
       if (this.isRGB) {
         let val = this.value.rgba[this.label]
         return Math.round(
-          ((val + 1) / 256) * 1000
+          (val / 255) * 1000
         ) / 1000
       }
 
@@ -70,7 +70,7 @@ export default {
         if (this.isRGB) {
           val = Math.min(1, val)
           val = Math.max(0, val)
-          val = (val * 256) - 1
+          val = val * 255
         }
 
         if (val >= 0 && val <= 0xff && this.isRGB) {
