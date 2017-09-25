@@ -30,7 +30,7 @@ export default {
   computed: {
     colors () {
       if ('rgba'.split('').includes(this.label)) {
-        return this.value.rgba[this.label]
+        return (this.value.rgba[this.label] / 256)
       }
 
       return this.value[this.label]
@@ -47,6 +47,10 @@ export default {
     getColor (e) {
       let colors = {}
       let val = e.target.value
+
+      if ('rgba'.split('').includes(this.label)) {
+        val = Math.round(val * 256)
+      }
 
       if (val >= 0 && val <= 0xff && 'rgba'.split('').includes(this.label)) {
         val = Number(e.target.value)
