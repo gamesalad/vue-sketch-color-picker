@@ -21,13 +21,13 @@
       <EditableInput label="hex" max="7" v-model="colorsModel" @change="inputChange" @update="inputUpdate" />
     </div>
     <div class="sketch-color-picker--field-single">
-      <EditableInput label="r" max="3" v-model="colorsModel" @change="inputChange" @update="inputUpdate" class="nb-left" />
+      <EditableInput label="r" max="5" v-model="colorsModel" @change="inputChange" @update="inputUpdate" class="nb-left" />
     </div>
     <div class="sketch-color-picker--field-single">
-      <EditableInput label="g" max="3" v-model="colorsModel" @change="inputChange" @update="inputUpdate" class="nb-left" />
+      <EditableInput label="g" max="5" v-model="colorsModel" @change="inputChange" @update="inputUpdate" class="nb-left" />
     </div>
     <div class="sketch-color-picker--field-single">
-      <EditableInput label="b" max="3" v-model="colorsModel" @change="inputChange" @update="inputUpdate" class="nb-left" />
+      <EditableInput label="b" max="5" v-model="colorsModel" @change="inputChange" @update="inputUpdate" class="nb-left" />
     </div>
     <div class="sketch-color-picker--field-single">
       <EditableInput label="a" max="4" v-model="colorsModel" @change="inputChange" @update="inputUpdate" class="nb-left" />
@@ -41,6 +41,7 @@
       class="sketch-color-picker--presets-color" />
     <a @click="addPreset()" class="add sketch-color-picker--presets-color">+</a>
   </div>
+  <div class="note">Rounding when converting between hexidecimal and decimal may cause small changes when editing color channel values.</div>
 </div>
 </template>
 
@@ -277,6 +278,13 @@ $prefix: 'sketch-color-picker';
     color: #d9d9d9;
     border-radius: 2px;
     font-family: arial,sans-serif;
+  }
+
+  .note {
+    color:#999;
+    font-size: 10px;
+    font-family: sans-serif;
+    padding-bottom: 1em;
   }
 }
 </style>

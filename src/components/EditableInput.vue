@@ -1,7 +1,7 @@
 <template>
 <div class="sketch-color-picker--editable">
   <input type="text" class="sketch-color-picker--editable__input"
-    v-model="colors"
+    v-model="tmpInput"
     @input="handleInput"
     @focus="handleFocus"
     @blur="handleUpdate"
@@ -28,9 +28,15 @@ export default {
   },
 
   computed: {
+    isRGB () {
+      return 'rgb'.split('').includes(this.label)
+    },
     colors () {
-      if ('rgba'.split('').includes(this.label)) {
-        return (this.value.rgba[this.label] / 256)
+      if (this.isRGB) {
+        let val = this.value.rgba[this.label]
+        return Math.round(
+          ((val + 1) / 256) * 1000
+        ) / 1000
       }
 
       return this.value[this.label]
@@ -39,7 +45,17 @@ export default {
 
   data () {
     return {
-      initialValue: ''
+      initialValue: '',
+      tmpInput: '',
+      inFocus: false
+    }
+  },
+
+  watch: {
+    value () {
+      if (!this.inFocus) {
+        this.syncInput()
+      }
     }
   },
 
@@ -48,14 +64,20 @@ export default {
       let colors = {}
       let val = e.target.value
 
-      if ('rgba'.split('').includes(this.label)) {
-        val = Math.round(val * 256)
-      }
+      if (this.isRGB && isNaN(val)) {
+        throw new Error('Incomplete')
+      } else {
+        if (this.isRGB) {
+          val = Math.min(1, val)
+          val = Math.max(0, val)
+          val = (val * 256) - 1
+        }
 
-      if (val >= 0 && val <= 0xff && 'rgba'.split('').includes(this.label)) {
-        val = Number(e.target.value)
-        if (this.label === 'a') {
-          val = parseFloat(e.target.value)
+        if (val >= 0 && val <= 0xff && this.isRGB) {
+          val = Number(val)
+          if (this.label === 'a') {
+            val = parseFloat(e.target.value)
+          }
         }
       }
 
@@ -64,19 +86,44 @@ export default {
     },
 
     handleInput (e) {
-      this.$emit('change', this.getColor(e))
+      try {
+        this.$emit('change', this.getColor(e))
+      } catch (e) {
+      }
     },
 
     handleFocus (e) {
-      this.initialValue = this.getColor(e)
+      this.inFocus = true
+      try {
+        this.initialValue = this.getColor(e)
+      } catch (e) {
+      }
+      this.syncInput()
     },
 
     handleUpdate (e) {
-      const colors = this.getColor(e)
-      if (colors[this.label] !== this.initialValue[this.label]) {
-        this.$emit('update')
+      this.inFocus = false
+      try {
+        const colors = this.getColor(e)
+        if (colors[this.label] !== this.initialValue[this.label]) {
+          this.$emit('update')
+        }
+      } catch (e) {
       }
+      this.syncInput()
+    },
+
+    syncInput () {
+      const _this = this
+      this.$nextTick(() => {
+        _this.tmpInput = this.colors
+      })
     }
+  },
+
+  mounted () {
+    this.initialValue = JSON.parse(JSON.stringify(this.value))
+    this.tmpInput = this.colors
   }
 }
 </script>
