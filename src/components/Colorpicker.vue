@@ -82,13 +82,14 @@ export default {
   },
   methods: {
     handleUpdatePreset (color) {
+      const _this = this
       this.handleMousedown(this.colorsModel)
       this.setColor({
         hex: color,
         source: srcType.PRESET
       }, false)
       this.$nextTick(() => {
-        this.handleUpdate(this.colorsModel)
+        _this.handleUpdate(this.colorsModel)
       })
     },
 
